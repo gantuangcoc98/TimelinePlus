@@ -20,35 +20,21 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
-    TextView text;
+    TextView signup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        text = (TextView) findViewById(R.id.signin);
+        signup = (TextView) findViewById(R.id.signup);
         Button btnLogin = findViewById(R.id.login);
 
-        /*SpannableString span = new SpannableString("Sign In");
-        ClickableSpan clickableSpan = new ClickableSpan() {
+        signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signin = new Intent(MainActivity.this, Register.class);
-                startActivity(signin);
-            }
-        };
-
-        span.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        TextView textView = findViewById(R.id.signin);
-        textView.setText(span);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());*/
-        text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent signin = new Intent(MainActivity.this, Register.class);
-                startActivity(signin);
+                Intent signup = new Intent(MainActivity.this, Register.class);
+                startActivity(signup);
             }
         });
 
