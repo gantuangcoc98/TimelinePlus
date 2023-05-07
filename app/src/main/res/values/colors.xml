@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="oblue">#802F2FA2</color>
+    <color name="opink">#80f64c72</color>
     <color name="blue">#2F2FA2</color>
     <color name="pink">#f64c72</color>
+    <color name="darkpink">#850E35</color>
+    <color name="darkblue">#242582</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
