@@ -15,12 +15,29 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.w3c.dom.Text;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
     TextView signup;
+    Button btnLogin;
+    EditText etEmail, etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         signup = (TextView) findViewById(R.id.signup);
-        Button btnLogin = findViewById(R.id.login);
+        btnLogin = findViewById(R.id.login);
+        etEmail = findViewById(R.id.email);
+        etPassword = findViewById(R.id.password);
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,9 +60,54 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent login = new Intent(MainActivity.this, Home.class);
-                startActivity(login);
+                String email = etEmail.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
+                login(email, password);
+                System.out.println(email + " " + password);
             }
         });
     }
+
+    private void login(final String email, final String password) {
+        String url = "jdbc:mysql://localhost:3306/dbtimeline+"; // Replace "your_database_name" with your actual database name
+        String user = "root"; // Replace "your_username" with your actual database username
+        String pass = ""; // Replace "your_password" with your actual database password
+
+        try {
+            // Load the JDBC driver for MySQL
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Create a Connection object to connect to the database
+            Connection con = DriverManager.getConnection(url, user, pass);
+
+            // Create a PreparedStatement object to execute the SQL query
+            String query = "SELECT * FROM user WHERE email=? AND password=?";
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+
+            // Execute the query and get the results
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // Login successful, navigate to the main activity
+                Intent login = new Intent(MainActivity.this, Home.class);
+                startActivity(login);
+                finish();
+            } else {
+                // Login failed, show error message
+                Toast.makeText(MainActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+            }
+
+            // Close the database resources
+            rs.close();
+            stmt.close();
+            con.close();
+
+        } catch (Exception e) {
+            // Handle error
+            e.printStackTrace();
+        }
+    }
+
 }
