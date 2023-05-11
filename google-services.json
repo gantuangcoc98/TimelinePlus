@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "768011031731",
+    "project_id": "timelineplus-b5370",
+    "storage_bucket": "timelineplus-b5370.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768011031731:android:2e3ce3c45b1ce262e30cc6",
+        "android_client_info": {
+          "package_name": "com.example.timelineplus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768011031731-fn6pvm7hn0p1ei8n2sleluq8kshn3lok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFLH9pcyonqBafFFWBVq3xQ5cTEnppgPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768011031731-fn6pvm7hn0p1ei8n2sleluq8kshn3lok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
