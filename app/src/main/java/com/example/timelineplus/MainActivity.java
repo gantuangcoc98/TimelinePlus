@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     TextView signup;
     Button btnLogin;
     EditText etEmail, etPassword;
+    TextView incorrectInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
         signup = (TextView) findViewById(R.id.signup);
         btnLogin = findViewById(R.id.login);
+        incorrectInput = (TextView) findViewById(R.id.IncorrectInput);
+        incorrectInput.setVisibility(View.INVISIBLE);
         etEmail = findViewById(R.id.email);
         etPassword = findViewById(R.id.password);
 
@@ -60,10 +63,19 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent login = new Intent(MainActivity.this, Home.class);
-                startActivity(login);
+                if (etEmail.getText().toString().equals("gantuangcoc98") && etPassword.getText().toString().equals("hello.world")) {
+                    Intent login = new Intent(MainActivity.this, Home.class);
+                    startActivity(login);
+                } else if (emptyFields()){
+                    Toast.makeText(MainActivity.this, "All fields should not be empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    incorrectInput.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
 
+    private boolean emptyFields(){
+        return etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty();
+    }
 }
