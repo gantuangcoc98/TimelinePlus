@@ -34,6 +34,8 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.sql.*;
+
 public class MainActivity extends AppCompatActivity {
     TextView signup;
     Button btnLogin;
@@ -63,19 +65,14 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etEmail.getText().toString().equals("gantuangcoc98") && etPassword.getText().toString().equals("hello.world")) {
-                    Intent login = new Intent(MainActivity.this, Home.class);
-                    startActivity(login);
-                } else if (emptyFields()){
-                    Toast.makeText(MainActivity.this, "All fields should not be empty", Toast.LENGTH_SHORT).show();
-                } else {
-                    incorrectInput.setVisibility(View.VISIBLE);
-                }
+                Intent login = new Intent(MainActivity.this, Home.class);
+                startActivity(login);
             }
         });
     }
 
-    private boolean emptyFields(){
+    private boolean emptyFields() {
         return etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty();
     }
+
 }
