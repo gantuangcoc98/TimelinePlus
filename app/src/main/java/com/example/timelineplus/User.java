@@ -1,41 +1,50 @@
 package com.example.timelineplus;
 
+import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.PropertyName;
 
+@IgnoreExtraProperties
 public class User {
     private String email;
-    private String pass;
+    private String password;
     private String firstName;
     private String lastName;
 
-    public User(String email, String pass) {
+    public User(String email, String password, String firstName, String lastName) {
         this.email = email;
-        this.pass = pass;
-    }
-
-    public User(String email, String pass, String firstName, String lastName) {
-        this.email = email;
-        this.pass = pass;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
     public User() {}
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference usersRef = database.getReference("users");
-
-    public void registerUser(User user) {
-        String userId = usersRef.push().getKey();
-        usersRef.child(userId).setValue(user);
+    @PropertyName("firstName")
+    public String getFirstName() {
+        return firstName;
     }
 
+    @PropertyName("lastName")
+    public String getLastName() {
+        return lastName;
+    }
+
+    @PropertyName("email")
     public String getEmail() {
         return email;
     }
 
-    public String getPass() {
-        return pass;
+    @PropertyName("password")
+    public String getPassword() {
+        return password;
     }
 }
