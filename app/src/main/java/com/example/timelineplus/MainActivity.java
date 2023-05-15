@@ -24,6 +24,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         signup = (TextView) findViewById(R.id.signup);
         btnLogin = findViewById(R.id.login);
         incorrectInput = (TextView) findViewById(R.id.IncorrectInput);
-        incorrectInput.setVisibility(View.INVISIBLE);
+        incorrectInput.setVisibility(View.GONE);
         etEmail = findViewById(R.id.email);
         etPassword = findViewById(R.id.password);
 
@@ -65,8 +69,24 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent login = new Intent(MainActivity.this, Home.class);
-                startActivity(login);
+                String email = etEmail.getText().toString();
+                String password = etPassword.getText().toString();
+
+                // Initialize to Sign in using the authenticated user in Firebase Authentication
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) { // If the user successfully inputted correct email and password
+                            Intent home = new Intent(MainActivity.this, Home.class);
+                            startActivity(home);
+
+                            System.out.println("Successfully login with authenticated user in Firebase Database");
+                        } else { // If the user inputted wrong email or password
+                            incorrectInput.setVisibility(View.VISIBLE);
+                            System.out.println("Login failed due to incorrect username or password");
+                        }
+                    }
+                });
             }
         });
     }
