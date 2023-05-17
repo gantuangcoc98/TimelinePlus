@@ -1,27 +1,13 @@
 package com.example.timelineplus;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.timelineplus.databinding.ActivityMainBinding;
 import com.example.timelineplus.databinding.HomeBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class Home extends AppCompatActivity {
 
@@ -42,7 +28,7 @@ public class Home extends AppCompatActivity {
                     replaceFragment(new FragmentHome());
                     return true;
                 case R.id.menuAddPost:
-                    System.out.println("Display Add Post Logic");
+                    replaceFragment(new FragmentAddPost());
                     return true;
                 case R.id.menuProfile:
                     replaceFragment(new FragmentProfile());
