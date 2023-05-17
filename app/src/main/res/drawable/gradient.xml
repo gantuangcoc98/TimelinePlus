@@ -6,4 +6,5 @@
         android:endColor="@color/pink"
         android:angle="45"
         />
+
 </shape>
