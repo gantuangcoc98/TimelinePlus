@@ -111,22 +111,20 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please input all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Initialize to Sign in using the authenticated user in Firebase Authentication
-                    Intent home = new Intent(MainActivity.this, Home.class);
-                    startActivity(home);
-//                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if (task.isSuccessful()) { // If the user successfully inputted correct email and password
-//                                Intent home = new Intent(MainActivity.this, Home.class);
-//                                startActivity(home);
-//
-//                                System.out.println("Successfully login with authenticated user in Firebase Database");
-//                            } else { // If the user inputted wrong email or password
-//                                incorrectInput.setVisibility(View.VISIBLE);
-//                                System.out.println("Login failed due to incorrect username or password");
-//                            }
-//                        }
-//                    });
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) { // If the user successfully inputted correct email and password
+                                Intent home = new Intent(MainActivity.this, Home.class);
+                                startActivity(home);
+
+                                System.out.println("Successfully login with authenticated user in Firebase Database");
+                            } else { // If the user inputted wrong email or password
+                                incorrectInput.setVisibility(View.VISIBLE);
+                                System.out.println("Login failed due to incorrect username or password");
+                            }
+                        }
+                    });
                 }
             }
         });

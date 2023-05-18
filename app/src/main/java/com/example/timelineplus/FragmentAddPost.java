@@ -1,44 +1,104 @@
 package com.example.timelineplus;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class FragmentAddPost extends Fragment {
-
     public FragmentAddPost() {
         // Required empty public constructor
     }
 
+    private DatabaseReference databaseReference;
+    private EditText setTitle;
+    private EditText setStartTime;
+    private EditText setEndTime;
+    private EditText setDate;
     private EditText setLocation;
     private EditText setEmail;
+    private EditText setNotes;
+    private Button btnPublish;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_post, container, false);
 
+        // Initialize the values of the global variables
+        databaseReference = FirebaseDatabase.getInstance().getReference("schedules");
+
+        // Get the ids of the EditText and the Buttons
+        setTitle = view.findViewById(R.id.addPostTitle);
+        setStartTime = view.findViewById(R.id.startTime);
+        setEndTime = view.findViewById(R.id.endTime);
+        setDate = view.findViewById(R.id.setDate);
         setLocation = view.findViewById(R.id.setLocation);
         setEmail = view.findViewById(R.id.setEmail);
-        setLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setLocation.setText("");
-            }
-        });
+        setNotes = view.findViewById(R.id.setNotes);
+        btnPublish = view.findViewById(R.id.btnPublish);
 
-        setEmail.setOnClickListener(new View.OnClickListener() {
+
+        // When the user clicks the Publish button save the data to the FireBase Database
+        btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setEmail.setText("");
+
+
+                // Convert the initialized ids to String variables
+                String scheduleTitle = setTitle.getText().toString();
+                String date = setDate.getText().toString();
+                String time = setStartTime.getText().toString() + " - " + setEndTime.getText().toString();
+                String location = setLocation.getText().toString();
+                String email = setEmail.getText().toString();
+                String notes = setNotes.getText().toString();
+
+
+                // Create a new object of ScheduleItem from the converted string variables
+                ScheduleItem scheduleItem = new ScheduleItem(scheduleTitle, date, time, notes);
+
+
+                // Initialize the database to save the converted string variables to the FireBase Realtime Database
+                String schedulesID = databaseReference.push().getKey(); // Create a key first
+                databaseReference.child(schedulesID).setValue(scheduleItem, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error == null) { // There is no error
+                            System.out.println("Successfully added new schedule data to the Firebase Realtime Database");
+                            Toast.makeText(getContext(), "Schedule published!", Toast.LENGTH_SHORT).show();
+                            Intent home = new Intent(getContext(), Home.class);
+                            startActivity(home);
+                        } else { // There is error
+                            System.out.println("Failed to add data to the Firebase Realtime Database");
+                            Toast.makeText(getContext(), "An error occured, please try again", Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
+
             }
         });
 
         return view;
     }
+
 }

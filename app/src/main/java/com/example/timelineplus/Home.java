@@ -9,29 +9,39 @@ import android.os.Bundle;
 
 import com.example.timelineplus.databinding.HomeBinding;
 
+import java.util.ArrayList;
+
 public class Home extends AppCompatActivity {
 
-    // Declare the FrameLayout and the BottomNavigation
+    // When user logged in and already on the Home, initialize the Fragment already
     private HomeBinding binding;
-
+    private FragmentHome home;
+    private FragmentAddPost addPost;
+    private FragmentProfile profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = HomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new FragmentHome());
 
+        // Initialize the different Fragments in advance
+        home = new FragmentHome();
+        addPost = new FragmentAddPost();
+        profile = new FragmentProfile();
+        replaceFragment(home);
+
+        // Initialize the functionality of the navigation buttons
         binding.bottomNav.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
                 case R.id.menuHome:
-                    replaceFragment(new FragmentHome());
+                    replaceFragment(home);
                     return true;
                 case R.id.menuAddPost:
-                    replaceFragment(new FragmentAddPost());
+                    replaceFragment(addPost);
                     return true;
                 case R.id.menuProfile:
-                    replaceFragment(new FragmentProfile());
+                    replaceFragment(profile);
                     return true;
             }
 
