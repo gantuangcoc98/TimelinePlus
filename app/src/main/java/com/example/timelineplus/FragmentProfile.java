@@ -56,6 +56,31 @@ public class FragmentProfile extends Fragment {
         });
 
 
+        // Schedule button implementation
+        btnSchedule = view.findViewById(R.id.btnSchedule);
+        btnSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Replace the current fragment with FragmentSchedule
+                FragmentSchedule fragmentSchedule = new FragmentSchedule();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.homeFrameLayout, fragmentSchedule)
+                        .addToBackStack(null) // Add the transaction to the back stack
+                        .commit();
+            }
+        });
+
+
+        // Friends button implementation
+        btnFriends = view.findViewById(R.id.btnFriends);
+
+
+        // Groups button implementation
+        btnGroups = view.findViewById(R.id.btnGroups);
+
+
         // Logout button implementation
         btnLogout = view.findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(new View.OnClickListener() { // If the user clicks the logout button
@@ -71,19 +96,6 @@ public class FragmentProfile extends Fragment {
                 getActivity().finish();
             }
         });
-
-
-        // Schedule button implementation
-        btnSchedule = view.findViewById(R.id.btnSchedule);
-        btnSchedule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        btnFriends = view.findViewById(R.id.btnFriends);
-        btnGroups = view.findViewById(R.id.btnGroups);
-
 
 
         return view;

@@ -41,7 +41,7 @@ public class FragmentHome extends Fragment {
         // Initialize the global variables
         context = getContext();
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ScheduleAdapter(context, new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
