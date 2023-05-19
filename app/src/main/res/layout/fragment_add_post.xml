@@ -7,8 +7,35 @@
     tools:context=".FragmentAddPost"
     android:background="@color/blue">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutTopAddSchedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:id="@+id/tvProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="Add Schedule"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_semibold"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:id="@+id/layoutTitle"
+        app:layout_constraintTop_toBottomOf="@+id/layoutTopAddSchedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -17,40 +44,31 @@
         android:background="@drawable/default_background"
         android:orientation="vertical"
         android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Edit Text of the Schedule Title-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <EditText
-                    android:id="@+id/addPostTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:text="" />
-            </LinearLayout>
+            <EditText
+                android:id="@+id/addPostTitle"
+                android:layout_width="249dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text=""
+                android:textColor="@color/white" />
 
         </LinearLayout>
         <!-- End of the Edit Text of the Schedule Title-->
@@ -60,34 +78,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="59dp"
+                android:layout_height="match_parent"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="Start"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <EditText
-                    android:id="@+id/startTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:text="" />
-            </LinearLayout>
+            <EditText
+                android:id="@+id/startTime"
+                android:layout_width="253dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:inputType="text"
+                android:text="" />
 
         </LinearLayout>
         <!-- End of the Edit Text of the Start Date-->
@@ -97,34 +107,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="57dp"
+                android:layout_height="match_parent"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="End"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
 
                 <EditText
                     android:id="@+id/endTime"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:inputType="text"
-                    android:text="" />
-            </LinearLayout>
+                    android:text=""
+                    android:textColor="@color/white"/>
 
         </LinearLayout>
         <!-- End of the Edit Text of the End Date-->
@@ -152,24 +155,26 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/date"
                 android:layout_gravity="center"/>
 
             <EditText
                 android:id="@+id/setDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="298dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
                 android:hint="Date"
                 android:inputType="text"
                 android:textSize="18sp"
-                android:fontFamily="@font/poppins_semibold"
-                android:background="@android:color/transparent"
-                android:layout_marginStart="10dp"/>
+                android:textColorHint="@color/white"/>
 
         </LinearLayout>
 
@@ -197,24 +202,26 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/baseline_location_on_24"
                 android:layout_gravity="center"/>
 
             <EditText
                 android:id="@+id/setLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="296dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
                 android:hint="Location"
                 android:inputType="text"
-                android:textSize="18sp"
-                android:fontFamily="@font/poppins_semibold"
-                android:background="@android:color/transparent"
-                android:layout_marginStart="10dp"/>
+                android:textColorHint="@color/white"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -241,24 +248,26 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/baseline_email_24"
                 android:layout_gravity="center"/>
 
             <EditText
                 android:id="@+id/setEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="299dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
                 android:hint="Email Address"
                 android:inputType="text"
-                android:textSize="18sp"
-                android:fontFamily="@font/poppins_semibold"
-                android:background="@android:color/transparent"
-                android:layout_marginStart="10dp"/>
+                android:textColorHint="@color/white"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -286,21 +295,23 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/notes"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="Notes"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/poppins_semibold"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
@@ -323,6 +334,7 @@
                 android:gravity="top|start"
                 android:paddingTop="8dp"
                 android:lineSpacingExtra="8dp"
+                android:textColorHint="@color/white"
             />
 
         </LinearLayout>
