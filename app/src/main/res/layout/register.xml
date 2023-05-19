@@ -15,7 +15,7 @@
         android:foregroundGravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email"
-        app:srcCompat="@drawable/circle" />
+        app:srcCompat="@drawable/circle_button" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -26,7 +26,7 @@
         android:foregroundGravity="center"
         app:layout_constraintBottom_toTopOf="@+id/lastname"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/circle" />
+        app:srcCompat="@drawable/circle_button" />
 
     <EditText
         android:id="@+id/firstname"

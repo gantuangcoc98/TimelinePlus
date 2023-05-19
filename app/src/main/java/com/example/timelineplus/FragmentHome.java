@@ -47,27 +47,27 @@ public class FragmentHome extends Fragment {
 
 
         // Initialize the DatabaseReference of Firebase Database from the "schedules" data
-        databaseReference = FirebaseDatabase.getInstance().getReference("schedules");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("schedules");
+        fetchScheduleItems();
 
+        return view;
+    }
 
-        // Initialize a ValueEventListener method to listen for changes in the data at that location in the Firebase Realtime Database.
+    // This method will get all the schedule data that is in the Firebase Database created by all users
+    private void fetchScheduleItems() {
         databaseReference.addValueEventListener(new ValueEventListener() {
-
-            /* NOTE WHEN USING DATASNAPSHOT, CUSTOM CLASS SHOULD HAVE AN EMPTY DEFAULT CONSTRUCTOR */
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<ScheduleItem> scheduleItems = new ArrayList<>(); // Crate an arraylist of your specified custom object
+                ArrayList<ScheduleItem> scheduleItems = new ArrayList<>();
 
-                // Traverse to all the resulted data taken from the DataSnapshot
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    ScheduleItem scheduleItem = dataSnapshot.getValue(ScheduleItem.class); // Retrieve the value of the result data and convert it into an instance of your specified custom class
-                    scheduleItems.add(scheduleItem); // Add the instance of your class to the ArrayList scheduleItems
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot scheduleSnapshot : userSnapshot.getChildren()) {
+                        ScheduleItem scheduleItem = scheduleSnapshot.getValue(ScheduleItem.class);
+                        scheduleItems.add(scheduleItem);
+                    }
                 }
 
-                // Initialize a new schedule adapter with the following ArrayList scheduleItems
                 adapter = new ScheduleAdapter(context, scheduleItems);
-
-                // Set the new initialized adapter to be the adapter of the RecyclerView
                 recyclerView.setAdapter(adapter);
             }
 
@@ -76,8 +76,6 @@ public class FragmentHome extends Fragment {
                 Log.e("Firebase", "Failed to read schedules.", error.toException());
             }
         });
-
-        return view;
     }
 
 }

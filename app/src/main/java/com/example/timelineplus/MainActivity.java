@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 if (emptyFields()) { // If the user did not input on the fields
                     Toast.makeText(MainActivity.this, "Please input all fields", Toast.LENGTH_SHORT).show();
                 } else {
+
                     // Initialize to Sign in using the authenticated user in Firebase Authentication
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
