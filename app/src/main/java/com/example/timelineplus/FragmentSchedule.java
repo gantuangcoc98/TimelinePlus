@@ -70,7 +70,8 @@ public class FragmentSchedule extends Fragment {
         btnJoinSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                adapter = new ScheduleAdapter(context, new ArrayList<>());
+                recyclerViewSchedule.setAdapter(adapter);
             }
         });
 

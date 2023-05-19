@@ -1,11 +1,18 @@
 package com.example.timelineplus;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -41,12 +49,13 @@ public class FragmentAddPost extends Fragment {
     private EditText setNotes;
     private Button btnPublish;
     private String userID;
-
+    private Context context;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_post, container, false);
+        context = getContext();
 
         // Initialize the values of the global variables
         databaseReference = FirebaseDatabase.getInstance().getReference("schedules");
@@ -68,7 +77,9 @@ public class FragmentAddPost extends Fragment {
         btnPublish = view.findViewById(R.id.btnPublish);
 
 
-        // When the user clicks the Publish button save the data to the FireBase Database
+        /* Implement the functionality of the buttons */
+
+        // Publish button implementation
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +92,6 @@ public class FragmentAddPost extends Fragment {
                 String location = setLocation.getText().toString();
                 String email = setEmail.getText().toString();
                 String notes = setNotes.getText().toString();
-
 
                 // Create a new object of ScheduleItem from the converted string variables
                 ScheduleItem scheduleItem = new ScheduleItem(scheduleTitle, date, location, email, time, notes);
@@ -104,7 +114,7 @@ public class FragmentAddPost extends Fragment {
                 if (error == null) { // There is no error
                     System.out.println("Successfully added new schedule data to the Firebase Realtime Database");
                     Toast.makeText(getContext(), "Schedule published!", Toast.LENGTH_SHORT).show();
-                    Intent home = new Intent(getContext(), Home.class);
+                    Intent home = new Intent(context, Home.class);
                     startActivity(home);
                 } else { // There is error
                     System.out.println("Failed to add data to the Firebase Realtime Database");

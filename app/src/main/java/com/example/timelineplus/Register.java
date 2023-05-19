@@ -23,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 public class Register extends AppCompatActivity {
-
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etEmail;
@@ -39,8 +38,10 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
+
         // Initialize Firebase Realtime Database reference
         usersRef = FirebaseDatabase.getInstance().getReference("users");
+
 
         // Get reference for the input fields and button
         etFirstName = findViewById(R.id.firstname);
@@ -49,6 +50,7 @@ public class Register extends AppCompatActivity {
         etPassword = findViewById(R.id.password);
         etConfirmPass = findViewById(R.id.confirmPassword);
         Button btnCreateAccount = findViewById(R.id.btnCreateAccount);
+
 
         // Implement the code if the user clicks the button: Create Account
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
@@ -92,17 +94,17 @@ public class Register extends AppCompatActivity {
                                             startActivity(login);
 
                                             System.out.println("Successfully added new data to the users");
-                                            Toast.makeText(Register.this, "Successfully Registered", Toast.LENGTH_SHORT);
+                                            Toast.makeText(Register.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
                                         } else { // There is error
                                             System.out.println("Failed to add data to the Firebase Realtime Database");
-                                            Toast.makeText(Register.this, "Registration failed!", Toast.LENGTH_SHORT);
+                                            Toast.makeText(Register.this, "Registration failed!", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
 
                                 System.out.println("Successfully created authenticated user in Firebase Database");
                             } else {
-                                Toast.makeText(Register.this, "Email already exist!", Toast.LENGTH_SHORT);
+                                Toast.makeText(Register.this, "Email already exist!", Toast.LENGTH_SHORT).show();
                                 System.out.println("Failed creating an authorized email and password in the Firebase");
                             }
                         }
