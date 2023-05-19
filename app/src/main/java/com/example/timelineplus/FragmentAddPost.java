@@ -40,6 +40,7 @@ public class FragmentAddPost extends Fragment {
     private EditText setEmail;
     private EditText setNotes;
     private Button btnPublish;
+    private String userID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +50,12 @@ public class FragmentAddPost extends Fragment {
 
         // Initialize the values of the global variables
         databaseReference = FirebaseDatabase.getInstance().getReference("schedules");
+
+
+        // Get the id of the current's user
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+
 
         // Get the ids of the EditText and the Buttons
         setTitle = view.findViewById(R.id.addPostTitle);
@@ -77,16 +84,11 @@ public class FragmentAddPost extends Fragment {
 
 
                 // Create a new object of ScheduleItem from the converted string variables
-                ScheduleItem scheduleItem = new ScheduleItem(scheduleTitle, date, time, notes);
-
-
-                // Get the current's user ID
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String userId = user.getUid();
+                ScheduleItem scheduleItem = new ScheduleItem(scheduleTitle, date, location, email, time, notes);
 
 
                 // Insert the create ScheduleItem data to the Firebase Database given the user's ID
-                insertScheduleToDatabase(userId, scheduleItem);
+                insertScheduleToDatabase(scheduleItem);
             }
         });
 
@@ -94,9 +96,9 @@ public class FragmentAddPost extends Fragment {
     }
 
     // This method will insert a ScheduleItem data with the corresponding user that posted it
-    private void insertScheduleToDatabase(String userId, ScheduleItem scheduleItem) {
-        String schedulesID = databaseReference.child(userId).push().getKey(); // Create a key under the user's ID
-        databaseReference.child(userId).child(schedulesID).setValue(scheduleItem, new DatabaseReference.CompletionListener() {
+    private void insertScheduleToDatabase(ScheduleItem scheduleItem) {
+        String schedulesID = databaseReference.child(userID).push().getKey(); // Create a key under the user's ID
+        databaseReference.child(userID).child(schedulesID).setValue(scheduleItem, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) { // There is no error

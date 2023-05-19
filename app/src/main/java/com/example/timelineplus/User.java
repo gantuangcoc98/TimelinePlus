@@ -1,16 +1,9 @@
 package com.example.timelineplus;
 
-import android.content.Intent;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.PropertyName;
+
+import java.util.ArrayList;
 
 @IgnoreExtraProperties
 public class User {
@@ -47,4 +40,5 @@ public class User {
     public String getPassword() {
         return password;
     }
+
 }

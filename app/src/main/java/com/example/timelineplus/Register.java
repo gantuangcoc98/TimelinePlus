@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.admin.SystemUpdatePolicy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +20,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class Register extends AppCompatActivity {
 
     private EditText etFirstName;
@@ -29,6 +30,9 @@ public class Register extends AppCompatActivity {
     private EditText etPassword;
     private EditText etConfirmPass;
     private DatabaseReference usersRef;
+    private String userID;
+    private ArrayList<String> joinedSchedules;
+    private ArrayList<String> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,27 +58,40 @@ public class Register extends AppCompatActivity {
                 String lastName = etLastName.getText().toString();
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
+                joinedSchedules = new ArrayList<>();
+                joinedSchedules.add("");
+                friends = new ArrayList<>();
+                friends.add("");
 
                 if (passwordConfirmed()) { // If the user inputted exact same password for confirm password
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                // Get the id of the current registered user
+                                FirebaseUser userRegistered = task.getResult().getUser();
+                                userID = userRegistered.getUid();
+
+
                                 // Create new instance of user
                                 User user = new User(email, password, firstName, lastName);
 
-                                // Generate a key of UserID in the FireBase Database
-                                String userID = usersRef.push().getKey();
 
                                 // Store the generated User data to the Firebase Realtime Database
                                 usersRef.child(userID).setValue(user, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                         if (error == null) { // If there is no error, proceed to Login Page
+
+                                            // Insert a new user to be added in the People data in the Firebase
+                                            insertNewPeople(user);
+
+
+                                            // Go to login page directly
                                             Intent login = new Intent(Register.this, MainActivity.class);
                                             startActivity(login);
 
-                                            System.out.println("Successfully registered data to the Firebase Realtime Database");
+                                            System.out.println("Successfully added new data to the users");
                                             Toast.makeText(Register.this, "Successfully Registered", Toast.LENGTH_SHORT);
                                         } else { // There is error
                                             System.out.println("Failed to add data to the Firebase Realtime Database");
@@ -85,6 +102,7 @@ public class Register extends AppCompatActivity {
 
                                 System.out.println("Successfully created authenticated user in Firebase Database");
                             } else {
+                                Toast.makeText(Register.this, "Email already exist!", Toast.LENGTH_SHORT);
                                 System.out.println("Failed creating an authorized email and password in the Firebase");
                             }
                         }
@@ -101,5 +119,25 @@ public class Register extends AppCompatActivity {
         }
         Toast.makeText(Register.this, "Confirm Password and actual Password is not the same!", Toast.LENGTH_SHORT);
         return false;
+    }
+
+    // This method will insert a new data to the People database with an objcect FriendItem
+    private void insertNewPeople(User user) {
+        DatabaseReference peopleRef = FirebaseDatabase.getInstance().getReference("people");
+
+        Person person = new Person(user.getFirstName() + " " + user.getLastName(), joinedSchedules, friends);
+
+
+        // This line of code will add a new data to the People data
+        peopleRef.child(userID).setValue(person, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                if (error == null) { // If there is no error
+                    System.out.println("Successfully added new data to the people");
+                } else { // There is error
+                    System.out.println("Failed to add data to the People in Firebase");
+                }
+            }
+        });
     }
 }

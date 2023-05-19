@@ -75,6 +75,19 @@ public class FragmentProfile extends Fragment {
 
         // Friends button implementation
         btnFriends = view.findViewById(R.id.btnFriends);
+        btnFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Replace the current fragment with FragmentFriends
+                FragmentFriends fragmentFriends = new FragmentFriends();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.homeFrameLayout, fragmentFriends)
+                        .addToBackStack(null) // Add the transaction to the back stack
+                        .commit();
+            }
+        });
 
 
         // Groups button implementation
