@@ -6,13 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.FriendViewHolder> {
+public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonViewHolder> {
     private ArrayList<Person> people;
     private Context context;
 
@@ -24,35 +35,38 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.FriendView
     @NonNull
     @Override
     // This will inflate the recycler view rows with the custom layout that we made (item_friends.xml)
-    public FriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PersonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_person, parent, false);
-        return new FriendViewHolder(view);
+        return new PersonViewHolder(view);
     }
 
     @Override
     // This will assign the values from our Firebase data to the values of the views in our custom layout
     // that we made (item_friends.xml)
-    public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PersonViewHolder holder, int position) {
         Person person = people.get(position);
-
         holder.tvName.setText(person.getName());
 
 
         // Confirm button implementation
-        holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
+        holder.btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Initialize a DatabaseReference to create or update the requests data
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("requests");
 
-            }
-        });
+                // Get the userID and the name of the current user that is logged in
+                String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                String currentUserName = nameOf(currentUserID);
 
+                // Get the userID of the requested user
+                String userID = person.getUserID();
 
-        // Delete button implementation
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                Request request = new Request(currentUserName);
+                request.setUserID(userID);
 
+                addFriend(databaseReference, currentUserID, request);
             }
         });
     }
@@ -62,16 +76,56 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.FriendView
         return people.size();
     }
 
-    public static class FriendViewHolder extends RecyclerView.ViewHolder {
+    public static class PersonViewHolder extends RecyclerView.ViewHolder {
         private TextView tvName;
-        private Button btnConfirm;
-        private Button btnDelete;
+        private Button btnAddFriend;
 
-        public FriendViewHolder(@NonNull View itemView) {
+        public PersonViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvName);
-            btnConfirm = itemView.findViewById(R.id.btnConfirm);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnAddFriend = itemView.findViewById(R.id.btnAddFriend);
         }
     }
+
+    private void addFriend(DatabaseReference databaseReference, String currentUser, Request request) {
+
+        databaseReference.child(request.getUserID()).child(currentUser).setValue(request, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                if (error == null) {
+                    System.out.println("Successfully added new schedule data to the Firebase Realtime Database");
+                    Toast.makeText(context, "Friend Request Sent", Toast.LENGTH_SHORT).show();
+                } else {
+                    System.out.println("Failed to add data to the Firebase Realtime Database");
+                    Toast.makeText(context, "An error occured, please try again", Toast.LENGTH_SHORT);
+                }
+            }
+        });
+    }
+
+    private String nameOf(String userID) {
+        final String[] name = new String[1];
+
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("people");
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    if (userSnapshot.getKey().equals(userID)) {
+                        Person currentPerson = userSnapshot.getValue(Person.class);
+                        name[0] = currentPerson.getName();
+                    }
+                    break;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return name[0];
+    }
+
 }

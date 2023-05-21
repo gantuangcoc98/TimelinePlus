@@ -77,16 +77,16 @@ public class FragmentFriends extends Fragment {
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        ArrayList<Person> friendItems = new ArrayList<>();
+                        ArrayList<Person> people = new ArrayList<>();
 
-                        for (DataSnapshot people : snapshot.getChildren()) {
-                            if (!people.getKey().equals(userID)) {
-                                Person person = people.getValue(Person.class);
-                                friendItems.add(person);
+                        for (DataSnapshot peopleSnapshot : snapshot.getChildren()) {
+                            if (!peopleSnapshot.getKey().equals(userID)) {
+                                Person person = peopleSnapshot.getValue(Person.class);
+                                people.add(person);
                             }
                         }
 
-                        adapter = new PersonAdapter(context, friendItems);
+                        adapter = new PersonAdapter(context, people);
                         recyclerViewFriends.setAdapter(adapter);
                     }
 

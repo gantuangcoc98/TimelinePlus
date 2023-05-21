@@ -24,7 +24,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvName"
+                android:id="@+id/tvRequestName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -41,10 +41,20 @@
                 android:layout_marginEnd="20dp">
 
                 <Button
-                    android:id="@+id/btnAddFriend"
+                    android:id="@+id/btnConfirm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Friend"
+                    android:text="Confirm"
+                    android:textColor="@color/white"
+                    android:background="@drawable/buttons"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"/>
+
+                <Button
+                    android:id="@+id/btnDecline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Decline"
                     android:textColor="@color/white"
                     android:background="@drawable/buttons"
                     android:layout_weight="1"

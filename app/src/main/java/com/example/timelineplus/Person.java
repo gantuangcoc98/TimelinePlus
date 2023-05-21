@@ -3,6 +3,7 @@ package com.example.timelineplus;
 import java.util.ArrayList;
 
 public class Person {
+    private String userID;
     private String name;
     private ArrayList<String> joinedSchedules;
     private ArrayList<String> friends;
@@ -37,4 +38,13 @@ public class Person {
     public void setFriends(ArrayList<String> friends) {
         this.friends = friends;
     }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
 }

@@ -128,7 +128,7 @@ public class Register extends AppCompatActivity {
         DatabaseReference peopleRef = FirebaseDatabase.getInstance().getReference("people");
 
         Person person = new Person(user.getFirstName() + " " + user.getLastName(), joinedSchedules, friends);
-
+        person.setUserID(userID);
 
         // This line of code will add a new data to the People data
         peopleRef.child(userID).setValue(person, new DatabaseReference.CompletionListener() {
