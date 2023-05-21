@@ -58,12 +58,11 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
 
                 // Get the userID and the name of the current user that is logged in
                 String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                String currentUserName = nameOf(currentUserID);
 
                 // Get the userID of the requested user
                 String userID = person.getUserID();
 
-                Request request = new Request(currentUserName);
+                Request request = new Request(nameOf(currentUserID));
                 request.setUserID(userID);
 
                 addFriend(databaseReference, currentUserID, request);
@@ -93,10 +92,10 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) {
-                    System.out.println("Successfully added new schedule data to the Firebase Realtime Database");
+                    System.out.println("Successfully added new friend request data to the Firebase Realtime Database");
                     Toast.makeText(context, "Friend Request Sent", Toast.LENGTH_SHORT).show();
                 } else {
-                    System.out.println("Failed to add data to the Firebase Realtime Database");
+                    System.out.println("Failed to add data to the request Firebase Realtime Database");
                     Toast.makeText(context, "An error occured, please try again", Toast.LENGTH_SHORT);
                 }
             }

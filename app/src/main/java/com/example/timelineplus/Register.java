@@ -29,7 +29,6 @@ public class Register extends AppCompatActivity {
     private EditText etPassword;
     private EditText etConfirmPass;
     private DatabaseReference usersRef;
-    private String userID;
     private ArrayList<String> joinedSchedules;
     private ArrayList<String> friends;
 
@@ -72,12 +71,12 @@ public class Register extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Get the id of the current registered user
                                 FirebaseUser userRegistered = task.getResult().getUser();
-                                userID = userRegistered.getUid();
+                                String userID = userRegistered.getUid();
 
 
                                 // Create new instance of user
                                 User user = new User(email, password, firstName, lastName);
-
+                                user.setUserID(userID);
 
                                 // Store the generated User data to the Firebase Realtime Database
                                 usersRef.child(userID).setValue(user, new DatabaseReference.CompletionListener() {
@@ -128,10 +127,10 @@ public class Register extends AppCompatActivity {
         DatabaseReference peopleRef = FirebaseDatabase.getInstance().getReference("people");
 
         Person person = new Person(user.getFirstName() + " " + user.getLastName(), joinedSchedules, friends);
-        person.setUserID(userID);
+        person.setPersonID(user.getUserID());
 
         // This line of code will add a new data to the People data
-        peopleRef.child(userID).setValue(person, new DatabaseReference.CompletionListener() {
+        peopleRef.child(user.getUserID()).setValue(person, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) { // If there is no error

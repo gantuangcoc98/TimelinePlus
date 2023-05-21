@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 @IgnoreExtraProperties
 public class User {
+    private String userID;
     private String email;
     private String password;
     private String firstName;
@@ -41,4 +42,11 @@ public class User {
         return password;
     }
 
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 }
