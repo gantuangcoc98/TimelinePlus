@@ -39,7 +39,7 @@ public class Person {
         this.friends = friends;
     }
 
-    public String getUserID() {
+    public String getPersonID() {
         return personID;
     }
 

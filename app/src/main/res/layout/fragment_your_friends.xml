@@ -18,12 +18,12 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/tvFriends"
+            android:id="@+id/tvYourFriends"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
             android:paddingBottom="10dp"
-            android:text="Friends"
+            android:text="Your Friends"
             android:textSize="25sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -46,55 +46,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp">
-
-            <LinearLayout
-                android:id="@+id/layoutFriendsButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp">
-
-                <Button
-                    android:id="@+id/btnSuggestions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/buttons"
-                    android:text="Suggestions"
-                    android:textSize="14sp"
-                    android:textAllCaps="false"
-                    android:layout_weight="1"/>
-
-                <Button
-                    android:id="@+id/btnYourFriends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/buttons"
-                    android:text="Your Friends"
-                    android:textSize="14sp"
-                    android:textAllCaps="false"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvFriendRequest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:text="Friend Requests"
-                android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="20sp"
-                />
+            android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewFriendRequest"
+                android:id="@+id/recyclerViewYourFriends"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

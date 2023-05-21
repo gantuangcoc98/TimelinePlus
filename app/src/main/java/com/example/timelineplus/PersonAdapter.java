@@ -1,6 +1,7 @@
 package com.example.timelineplus;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,23 +50,46 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
         holder.tvName.setText(person.getName());
 
 
-        // Confirm button implementation
+        // Add Friend button implementation
         holder.btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Initialize a DatabaseReference to create or update the requests data
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("requests");
-
-                // Get the userID and the name of the current user that is logged in
+                // Get the userID of the current user that is logged in
                 String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                // Get the userID of the requested user
-                String userID = person.getUserID();
 
-                Request request = new Request(nameOf(currentUserID));
-                request.setUserID(userID);
+                // Get first the name of the current user that is logged in
+                DatabaseReference peopleRef = FirebaseDatabase.getInstance().getReference("people");
+                peopleRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot personData : snapshot.getChildren()) {
+                            if (personData.getKey().equals(currentUserID)) {
+                                Person currentPerson = personData.getValue(Person.class);
+                                String currentName = currentPerson.getName(); // Now we have finally get the name of the current person that is logged in
 
-                addFriend(databaseReference, currentUserID, request);
+
+                                // Get the userID of the requested user
+                                String personID = person.getPersonID();
+
+
+                                // Create new request object that passes the currentName as a parameter for the name of the request
+                                Request request = new Request(currentName);
+                                request.setUserID(personID);
+
+
+                                // Run the addFriend method which create a data to the requests table in Datbase
+                                addRequest(currentUserID, request);
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
     }
@@ -86,9 +110,11 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
         }
     }
 
-    private void addFriend(DatabaseReference databaseReference, String currentUser, Request request) {
+    private void addRequest(String currentUser, Request request) {
 
-        databaseReference.child(request.getUserID()).child(currentUser).setValue(request, new DatabaseReference.CompletionListener() {
+        // Initialize a DatabaseReference to create or update the requests data
+        DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
+        requestRef.child(request.getUserID()).child(currentUser).setValue(request, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) {
@@ -96,35 +122,10 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
                     Toast.makeText(context, "Friend Request Sent", Toast.LENGTH_SHORT).show();
                 } else {
                     System.out.println("Failed to add data to the request Firebase Realtime Database");
-                    Toast.makeText(context, "An error occured, please try again", Toast.LENGTH_SHORT);
+                    Toast.makeText(context, "An error occured, please try again", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
-
-    private String nameOf(String userID) {
-        final String[] name = new String[1];
-
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("people");
-        usersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    if (userSnapshot.getKey().equals(userID)) {
-                        Person currentPerson = userSnapshot.getValue(Person.class);
-                        name[0] = currentPerson.getName();
-                    }
-                    break;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        return name[0];
     }
 
 }

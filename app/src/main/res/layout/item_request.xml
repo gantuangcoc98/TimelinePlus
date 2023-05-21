@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:text="Decline"
                     android:textColor="@color/white"
-                    android:background="@drawable/buttons"
+                    android:background="@drawable/darkerbutton"
                     android:layout_weight="1"
                     android:layout_marginRight="10dp"/>
 

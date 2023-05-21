@@ -122,7 +122,7 @@ public class Register extends AppCompatActivity {
         return false;
     }
 
-    // This method will insert a new data to the People database with an objcect FriendItem
+    // This method will insert a new data to the People database with an object Person
     private void insertNewPeople(User user) {
         DatabaseReference peopleRef = FirebaseDatabase.getInstance().getReference("people");
 
@@ -130,7 +130,7 @@ public class Register extends AppCompatActivity {
         person.setPersonID(user.getUserID());
 
         // This line of code will add a new data to the People data
-        peopleRef.child(user.getUserID()).setValue(person, new DatabaseReference.CompletionListener() {
+        peopleRef.child(person.getPersonID()).setValue(person, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) { // If there is no error

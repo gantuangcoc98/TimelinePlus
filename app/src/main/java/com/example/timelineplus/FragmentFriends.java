@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,10 +33,9 @@ public class FragmentFriends extends Fragment {
     private Button btnSuggestions;
     private Button btnYourFriends;
     private Context context;
-    private RecyclerView recyclerViewFriends;
+    private RecyclerView recyclerViewFriendRequest;
     private PersonAdapter adapter;
-    private DatabaseReference databaseReference;
-    private String userID;
+    private String userID; // This is the userID of the current user that is logged in
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,59 +43,67 @@ public class FragmentFriends extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
 
-        // Initialize the ids of the buttons
+        // Get the current user's ID
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userID = user.getUid();
+
+
+        // Initialize the ids of the buttons and the global variables
         btnSuggestions = view.findViewById(R.id.btnSuggestions);
         btnYourFriends = view.findViewById(R.id.btnYourFriends);
         context = getContext();
 
 
         // Initialize the recyclerview and the adapters
-        recyclerViewFriends = view.findViewById(R.id.recyclerViewFriends);
-        recyclerViewFriends.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new PersonAdapter(context, new ArrayList<>());
-        recyclerViewFriends.setAdapter(adapter);
+        recyclerViewFriendRequest = view.findViewById(R.id.recyclerViewFriendRequest);
+        recyclerViewFriendRequest.setLayoutManager(new LinearLayoutManager(context));
 
 
-        // Initialize the DatabaseReference
-        databaseReference = FirebaseDatabase.getInstance().getReference("people");
+        // Initialize to display all of the friend request of the current user that is logged in
+        DatabaseReference requests = FirebaseDatabase.getInstance().getReference("requests");
+        requests.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Request> requests = new ArrayList<>();
 
+                for (DataSnapshot personData : snapshot.getChildren()) {
+                    if (personData.getKey().equals(userID)) {
+                        for (DataSnapshot requestData : personData.getChildren()) {
+                            Request request = requestData.getValue(Request.class);
+                            requests.add(request);
+                        }
+                        break;
+                    }
+                }
 
-        // Get the current user's ID
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
+                RequestAdapter requestAdapter = new RequestAdapter(context, requests);
+                recyclerViewFriendRequest.setAdapter(requestAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         /* Implement the functionality of the buttons */
 
-
         // Suggestions button implementation
         btnSuggestions.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) { // This will show all people in the database if the user clicks the Suggestions
 
-                // This will show all people in the database if the user clicks the Suggestions
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        ArrayList<Person> people = new ArrayList<>();
-
-                        for (DataSnapshot peopleSnapshot : snapshot.getChildren()) {
-                            if (!peopleSnapshot.getKey().equals(userID)) {
-                                Person person = peopleSnapshot.getValue(Person.class);
-                                people.add(person);
-                            }
-                        }
-
-                        adapter = new PersonAdapter(context, people);
-                        recyclerViewFriends.setAdapter(adapter);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("Firebase", "Failed to read schedules.", error.toException());
-                    }
-                });
+                // Replace the current fragment with FragmentSuggestions
+                FragmentSuggestions fragmentSuggestions = new FragmentSuggestions();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.homeFrameLayout, fragmentSuggestions)
+                        .addToBackStack(null) // Add the transaction to the back stack
+                        .commit();
             }
+
         });
 
 
@@ -103,12 +111,44 @@ public class FragmentFriends extends Fragment {
         btnYourFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter = new PersonAdapter(context, new ArrayList<>());
-                recyclerViewFriends.setAdapter(adapter);
+
+                // Replace the current fragment with FragmentYourFriends
+                FragmentYourFriends fragmentYourFriends = new FragmentYourFriends();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.homeFrameLayout, fragmentYourFriends)
+                        .addToBackStack(null) // Add the transaction to the back stack
+                        .commit();
             }
         });
 
 
         return view;
     }
+
+    private boolean alreadyRequested(String userID) {
+        final boolean[] flag = new boolean[1];
+
+        DatabaseReference requests = FirebaseDatabase.getInstance().getReference("requests");
+        requests.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot personData : snapshot.getChildren()) {
+                    for (DataSnapshot requestData : personData.getChildren()) {
+                        if (requestData.getKey().equals(userID)) {
+                            flag[0] = true;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return false;
+    }
+
 }
