@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +33,7 @@ public class FragmentFriends extends Fragment {
     private Button btnYourFriends;
     private Context context;
     private RecyclerView recyclerViewFriendRequest;
-    private PersonAdapter adapter;
-    private String userID; // This is the userID of the current user that is logged in
+    private String currentUserID; // This is the userID of the current user that is logged in
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,8 +42,7 @@ public class FragmentFriends extends Fragment {
 
 
         // Get the current user's ID
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
+        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
         // Initialize the ids of the buttons and the global variables
@@ -67,7 +64,7 @@ public class FragmentFriends extends Fragment {
                 ArrayList<Request> requests = new ArrayList<>();
 
                 for (DataSnapshot personData : snapshot.getChildren()) {
-                    if (personData.getKey().equals(userID)) {
+                    if (personData.getKey().equals(currentUserID)) {
                         for (DataSnapshot requestData : personData.getChildren()) {
                             Request request = requestData.getValue(Request.class);
                             requests.add(request);

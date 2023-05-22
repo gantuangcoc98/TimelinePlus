@@ -38,7 +38,7 @@ public class FragmentSchedule extends Fragment {
     private DatabaseReference databaseReference;
     private Context context;
     private RecyclerView recyclerViewSchedule;
-    private ScheduleAdapter adapter;
+    JoinedScheduleAdapter joinedScheduleAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,24 +61,78 @@ public class FragmentSchedule extends Fragment {
         context = getContext();
         recyclerViewSchedule = view.findViewById(R.id.recyclerViewSchedule);
         recyclerViewSchedule.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new ScheduleAdapter(context, new ArrayList<>());
-        recyclerViewSchedule.setAdapter(adapter);
+
+
+        // Initialize to display all of the schedules
+        DatabaseReference allSchedules = FirebaseDatabase.getInstance().getReference("schedules").child(currentUserID);
+        allSchedules.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<JoinedSchedule> scheduleList = new ArrayList<>();
+
+                for (DataSnapshot schedType : snapshot.getChildren()) {
+
+                    if (schedType.getKey().equals("Joined Schedules")) {
+                        for (DataSnapshot joinedSched : schedType.getChildren()) {
+                            JoinedSchedule joinedSchedule = joinedSched.getValue(JoinedSchedule.class);
+                            scheduleList.add(joinedSchedule);
+                        }
+                    } else if (schedType.getKey().equals("Own Schedule")) {
+                        for (DataSnapshot ownSched : schedType.getChildren()) {
+                            ScheduleItem scheduleItem = ownSched.getValue(ScheduleItem.class);
+                            JoinedSchedule ownSchedule = new JoinedSchedule(scheduleItem);
+                            scheduleList.add(ownSchedule);
+                        }
+                    }
+
+                }
+
+                joinedScheduleAdapter = new JoinedScheduleAdapter(context, scheduleList);
+                recyclerViewSchedule.setAdapter(joinedScheduleAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         /* Implement the button with their ids */
 
         // Joined Schedule button implementation
-        btnJoinSchedule.setOnClickListener(new View.OnClickListener() {
+        btnJoinSchedule.setOnClickListener(new View.OnClickListener() { // This will display only those schedules that are joined by the user
             @Override
             public void onClick(View view) {
-                adapter = new ScheduleAdapter(context, new ArrayList<>());
-                recyclerViewSchedule.setAdapter(adapter);
+                allSchedules.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<JoinedSchedule> scheduleList = new ArrayList<>();
+
+                        for (DataSnapshot schedType : snapshot.getChildren()) {
+                            if (schedType.getKey().equals("Joined Schedules")) {
+                                for (DataSnapshot joinedSched : schedType.getChildren()) {
+                                    JoinedSchedule joinedSchedule = joinedSched.getValue(JoinedSchedule.class);
+                                    scheduleList.add(joinedSchedule);
+                                }
+                            }
+                        }
+
+                        joinedScheduleAdapter = new JoinedScheduleAdapter(context, scheduleList);
+                        recyclerViewSchedule.setAdapter(joinedScheduleAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
 
 
         // Your Schedule button implementation
-        btnYourSchedule.setOnClickListener(new View.OnClickListener() {
+        btnYourSchedule.setOnClickListener(new View.OnClickListener() { // This will display only those schedules that are owned by the user
             @Override
             public void onClick(View view) {
                 databaseReference.addValueEventListener(new ValueEventListener() {
@@ -101,7 +155,7 @@ public class FragmentSchedule extends Fragment {
                             }
                         }
 
-                        JoinedScheduleAdapter joinedScheduleAdapter = new JoinedScheduleAdapter(context, joinedSchedules);
+                        joinedScheduleAdapter = new JoinedScheduleAdapter(context, joinedSchedules);
                         recyclerViewSchedule.setAdapter(joinedScheduleAdapter);
                     }
 

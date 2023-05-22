@@ -1,27 +1,16 @@
 package com.example.timelineplus;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,8 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 
 public class FragmentAddPost extends Fragment {
     public FragmentAddPost() {
@@ -48,7 +35,7 @@ public class FragmentAddPost extends Fragment {
     private EditText setEmail;
     private EditText setNotes;
     private Button btnPublish;
-    private String userID;
+    private String currentUserID;
     private Context context;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,13 +44,14 @@ public class FragmentAddPost extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_post, container, false);
         context = getContext();
 
+
         // Initialize the values of the global variables
         databaseReference = FirebaseDatabase.getInstance().getReference("schedules");
 
 
-        // Get the id of the current's user
+        // Get the id of the current user that is logged in
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
+        currentUserID = user.getUid();
 
 
         // Get the ids of the EditText and the Buttons
@@ -95,9 +83,11 @@ public class FragmentAddPost extends Fragment {
 
                 // Create a new object of ScheduleItem from the converted string variables
                 ScheduleItem scheduleItem = new ScheduleItem(scheduleTitle, date, location, email, time, notes);
+                String schedulesID = databaseReference.child(currentUserID).push().getKey(); // Create a key under the user's ID
+                scheduleItem.setScheduleID(schedulesID);
 
 
-                // Insert the create ScheduleItem data to the Firebase Database given the user's ID
+                // Insert the created ScheduleItem data to the database
                 insertScheduleToDatabase(scheduleItem);
             }
         });
@@ -107,8 +97,7 @@ public class FragmentAddPost extends Fragment {
 
     // This method will insert a ScheduleItem data with the corresponding user that posted it
     private void insertScheduleToDatabase(ScheduleItem scheduleItem) {
-        String schedulesID = databaseReference.child(userID).push().getKey(); // Create a key under the user's ID
-        databaseReference.child(userID).child("Own Schedule").child(schedulesID).setValue(scheduleItem, new DatabaseReference.CompletionListener() {
+        databaseReference.child(currentUserID).child("Own Schedule").child(scheduleItem.getScheduleID()).setValue(scheduleItem, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) { // There is no error

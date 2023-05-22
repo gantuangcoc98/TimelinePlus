@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
-        android:text="Activities Near You"
+        android:text="Other Activities"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@color/white"

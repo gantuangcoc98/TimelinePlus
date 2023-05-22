@@ -3,6 +3,7 @@ package com.example.timelineplus;
 import java.util.ArrayList;
 
 public class ScheduleItem {
+    private String scheduleID;
     private String scheduleTitle = "Schedule Title: ";
     private String setScheduleTitle;
     private String dateTitle = "Date: ";
@@ -68,5 +69,13 @@ public class ScheduleItem {
 
     public String getSetNotes() {
         return setNotes;
+    }
+
+    public String getScheduleID() {
+        return scheduleID;
+    }
+
+    public void setScheduleID(String scheduleID) {
+        this.scheduleID = scheduleID;
     }
 }

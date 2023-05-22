@@ -7,6 +7,8 @@ public class JoinedSchedule {
         this.scheduleItem = scheduleItem;
     }
 
+    public JoinedSchedule(){}
+
     public ScheduleItem getScheduleItem() {
         return scheduleItem;
     }

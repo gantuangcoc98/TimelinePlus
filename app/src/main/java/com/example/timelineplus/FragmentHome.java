@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,10 @@ public class FragmentHome extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
+        // Get first the id of the current user that is logged in
+        String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
         // Initialize the global variables
         context = getContext();
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -47,18 +52,43 @@ public class FragmentHome extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
+        // Get first the id of the joined schedule of the current user and store in a list
+        ArrayList<String> joinedScheduleList = new ArrayList<>();
+        DatabaseReference joinedSchedules = FirebaseDatabase.getInstance().getReference("schedules").child(currentUserID).child("Joined Schedules");
+        joinedSchedules.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot joinedSched : snapshot.getChildren()) {
+                    String joinedSchedKey = joinedSched.getKey();
+                    joinedScheduleList.add(joinedSchedKey);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         // Initialize the DatabaseReference of Firebase Database from the "schedules" data
         databaseReference = FirebaseDatabase.getInstance().getReference().child("schedules");
-        fetchScheduleItems();
+
+        fetchScheduleItems(joinedScheduleList); // This method will display only those that are not owned by the current user and is also not joined yet
 
         return view;
     }
 
+
     // This method will get all the schedule data that is in the Firebase Database created by all users
-    private void fetchScheduleItems() {
+    private void fetchScheduleItems(ArrayList<String> joinedScheduleList) {
+
 
         // Get first the id of the current user
         String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+        // Implement to only display the schedule that is not owned by the current user and is also not joined yet
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -66,10 +96,14 @@ public class FragmentHome extends Fragment {
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     if (!userSnapshot.getKey().equals(currentUserID)) {
-                        for (DataSnapshot allSchedule : userSnapshot.getChildren()) {
-                            for (DataSnapshot scheduleSnapshot : allSchedule.getChildren()) {
-                                ScheduleItem scheduleItem = scheduleSnapshot.getValue(ScheduleItem.class);
-                                scheduleItems.add(scheduleItem);
+                        for (DataSnapshot schedType : userSnapshot.getChildren()) {
+                            if (schedType.getKey().equals("Own Schedule")) {
+                                for (DataSnapshot scheduleSnapshot : schedType.getChildren()) {
+                                    if (!joinedScheduleList.contains(scheduleSnapshot.getKey())) {
+                                        ScheduleItem scheduleItem = scheduleSnapshot.getValue(ScheduleItem.class);
+                                        scheduleItems.add(scheduleItem);
+                                    }
+                                }
                             }
                         }
                     }

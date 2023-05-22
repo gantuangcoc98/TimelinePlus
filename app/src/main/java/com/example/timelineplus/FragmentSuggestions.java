@@ -60,7 +60,6 @@ public class FragmentSuggestions extends Fragment {
                 for (DataSnapshot friend : snapshot.getChildren()) {
                     myFriends.add(friend.getKey());
                 }
-                System.out.println(myFriends);
             }
 
             @Override
