@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,7 @@ public class FragmentSuggestions extends Fragment {
 
 
         // Get the id of the current user that is logged in
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
         // Initialize the global variables
@@ -50,17 +51,34 @@ public class FragmentSuggestions extends Fragment {
         context = getContext();
 
 
-        // Initialize the DatabaseReference to display all the people
+        // Initialize the DatabaseReference to display all the people that is not friend yet
+        ArrayList<String> myFriends = new ArrayList<>();
+        DatabaseReference friends = FirebaseDatabase.getInstance().getReference("friends").child(currentUserID);
+        friends.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot friend : snapshot.getChildren()) {
+                    myFriends.add(friend.getKey());
+                }
+                System.out.println(myFriends);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         DatabaseReference people = FirebaseDatabase.getInstance().getReference("people");
         people.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Person> people = new ArrayList<>();
 
-                for (DataSnapshot peopleSnapshot : snapshot.getChildren()) {
-                    if (!peopleSnapshot.getKey().equals(userID)) {
-                        Person person = peopleSnapshot.getValue(Person.class);
-                        people.add(person);
+                for (DataSnapshot person : snapshot.getChildren()) {
+                    if (!person.getKey().equals(currentUserID) && !myFriends.contains(person.getKey())) {
+                        Person newPerson = person.getValue(Person.class);
+                        people.add(newPerson);
                     }
                 }
 
@@ -70,6 +88,7 @@ public class FragmentSuggestions extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
