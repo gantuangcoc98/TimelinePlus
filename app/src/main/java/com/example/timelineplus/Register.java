@@ -29,8 +29,6 @@ public class Register extends AppCompatActivity {
     private EditText etPassword;
     private EditText etConfirmPass;
     private DatabaseReference usersRef;
-    private ArrayList<String> joinedSchedules;
-    private ArrayList<String> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +57,6 @@ public class Register extends AppCompatActivity {
                 String lastName = etLastName.getText().toString();
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                joinedSchedules = new ArrayList<>();
-                joinedSchedules.add("");
-                friends = new ArrayList<>();
-                friends.add("");
 
                 if (passwordConfirmed()) { // If the user inputted exact same password for confirm password
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -126,7 +120,7 @@ public class Register extends AppCompatActivity {
     private void insertNewPeople(User user) {
         DatabaseReference peopleRef = FirebaseDatabase.getInstance().getReference("people");
 
-        Person person = new Person(user.getFirstName() + " " + user.getLastName(), joinedSchedules, friends);
+        Person person = new Person(user.getFirstName() + " " + user.getLastName());
         person.setPersonID(user.getUserID());
 
         // This line of code will add a new data to the People data

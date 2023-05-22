@@ -126,29 +126,4 @@ public class FragmentFriends extends Fragment {
         return view;
     }
 
-    private boolean alreadyRequested(String userID) {
-        final boolean[] flag = new boolean[1];
-
-        DatabaseReference requests = FirebaseDatabase.getInstance().getReference("requests");
-        requests.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot personData : snapshot.getChildren()) {
-                    for (DataSnapshot requestData : personData.getChildren()) {
-                        if (requestData.getKey().equals(userID)) {
-                            flag[0] = true;
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        return false;
-    }
-
 }

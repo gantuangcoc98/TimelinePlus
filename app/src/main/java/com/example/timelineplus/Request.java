@@ -1,7 +1,7 @@
 package com.example.timelineplus;
 
 public class Request {
-    private String userID;
+    private String requestID;
     private String name;
 
     public Request(String name) {
@@ -10,12 +10,12 @@ public class Request {
 
     public Request() {}
 
-    public String getUserID() {
-        return userID;
+    public String getRequestID() {
+        return requestID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setRequestID(String requestID) {
+        this.requestID = requestID;
     }
 
     public String getName() {

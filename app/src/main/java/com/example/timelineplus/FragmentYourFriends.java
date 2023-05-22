@@ -3,6 +3,7 @@ package com.example.timelineplus;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
 public class FragmentYourFriends extends Fragment {
 
     public FragmentYourFriends() {
@@ -26,6 +38,9 @@ public class FragmentYourFriends extends Fragment {
         View view = inflater.inflate(R.layout.fragment_your_friends, container, false);
 
 
+        // Get the current ID of the user that is logged in
+        String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         // Initialize the global variables
         context = getContext();
 
@@ -33,6 +48,30 @@ public class FragmentYourFriends extends Fragment {
         // Initialize the recyclerview
         recyclerViewYourFriends = view.findViewById(R.id.recyclerViewYourFriends);
         recyclerViewYourFriends.setLayoutManager(new LinearLayoutManager(context));
+
+
+        // Initialize to display all the friend data in the friends column in the database
+        DatabaseReference friends = FirebaseDatabase.getInstance().getReference("friends").child(currentUserID);
+        friends.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Friends> friendList = new ArrayList<>();
+
+                for (DataSnapshot friend : snapshot.getChildren()) {
+                    Friends ourFriend = friend.getValue(Friends.class);
+                    friendList.add(ourFriend);
+                }
+
+                FriendAdapter friendAdapter = new FriendAdapter(context, friendList);
+                recyclerViewYourFriends.setAdapter(friendAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         return view;
     }

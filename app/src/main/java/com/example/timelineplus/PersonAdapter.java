@@ -75,11 +75,11 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
 
                                 // Create new request object that passes the currentName as a parameter for the name of the request
                                 Request request = new Request(currentName);
-                                request.setUserID(personID);
+                                request.setRequestID(currentUserID);
 
 
                                 // Run the addFriend method which create a data to the requests table in Datbase
-                                addRequest(currentUserID, request);
+                                addRequest(personID, currentUserID, request);
                                 break;
                             }
                         }
@@ -110,11 +110,11 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
         }
     }
 
-    private void addRequest(String currentUser, Request request) {
+    private void addRequest(String personID, String currentUserID, Request request) {
 
         // Initialize a DatabaseReference to create or update the requests data
         DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
-        requestRef.child(request.getUserID()).child(currentUser).setValue(request, new DatabaseReference.CompletionListener() {
+        requestRef.child(personID).child(currentUserID).setValue(request, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) {
