@@ -108,16 +108,16 @@ public class FragmentAddPost extends Fragment {
     // This method will insert a ScheduleItem data with the corresponding user that posted it
     private void insertScheduleToDatabase(ScheduleItem scheduleItem) {
         String schedulesID = databaseReference.child(userID).push().getKey(); // Create a key under the user's ID
-        databaseReference.child(userID).child(schedulesID).setValue(scheduleItem, new DatabaseReference.CompletionListener() {
+        databaseReference.child(userID).child("Own Schedule").child(schedulesID).setValue(scheduleItem, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) { // There is no error
-                    System.out.println("Successfully added new schedule data to the Firebase Realtime Database");
+                    System.out.println("Successfully added new data to the schedules column");
                     Toast.makeText(getContext(), "Schedule published!", Toast.LENGTH_SHORT).show();
                     Intent home = new Intent(context, Home.class);
                     startActivity(home);
                 } else { // There is error
-                    System.out.println("Failed to add data to the Firebase Realtime Database");
+                    System.out.println("Failed to add new data to the schedules column");
                     Toast.makeText(getContext(), "An error occured, please try again", Toast.LENGTH_SHORT);
                 }
             }

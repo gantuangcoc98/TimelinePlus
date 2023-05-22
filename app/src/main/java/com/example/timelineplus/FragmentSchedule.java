@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,7 @@ public class FragmentSchedule extends Fragment {
 
         // Initialize the DatabaseReference of the Firebase and get the currents userID
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String userId = user.getUid();
+        String currentUserID = user.getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference("schedules");
 
 
@@ -83,20 +84,25 @@ public class FragmentSchedule extends Fragment {
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        ArrayList<ScheduleItem> scheduleItems = new ArrayList<>();
+                        ArrayList<JoinedSchedule> joinedSchedules = new ArrayList<>();
 
                         for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                            if (userSnapshot.getKey().equals(userId)) {
-                                for (DataSnapshot scheduleSnapshot : userSnapshot.getChildren()) {
-                                    ScheduleItem scheduleItem = scheduleSnapshot.getValue(ScheduleItem.class);
-                                    scheduleItems.add(scheduleItem);
+                            if (userSnapshot.getKey().equals(currentUserID)) {
+                                for (DataSnapshot allSchedule : userSnapshot.getChildren()) {
+                                    if (allSchedule.getKey().equals("Own Schedule")) {
+                                        for (DataSnapshot scheduleSnapshot : allSchedule.getChildren()) {
+                                            ScheduleItem scheduleItem = scheduleSnapshot.getValue(ScheduleItem.class);
+                                            JoinedSchedule joinedSchedule = new JoinedSchedule(scheduleItem);
+                                            joinedSchedules.add(joinedSchedule);
+                                        }
+                                        break;
+                                    }
                                 }
-                                break;
                             }
                         }
 
-                        adapter = new ScheduleAdapter(context, scheduleItems);
-                        recyclerViewSchedule.setAdapter(adapter);
+                        JoinedScheduleAdapter joinedScheduleAdapter = new JoinedScheduleAdapter(context, joinedSchedules);
+                        recyclerViewSchedule.setAdapter(joinedScheduleAdapter);
                     }
 
                     @Override

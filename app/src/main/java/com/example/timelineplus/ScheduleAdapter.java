@@ -46,7 +46,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         holder.joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Perform the operations when Join button is clicked
+
+                // Perform the implementation when Join button is clicked
+
             }
         });
     }

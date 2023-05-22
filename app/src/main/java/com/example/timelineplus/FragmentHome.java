@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,15 +56,22 @@ public class FragmentHome extends Fragment {
 
     // This method will get all the schedule data that is in the Firebase Database created by all users
     private void fetchScheduleItems() {
+
+        // Get first the id of the current user
+        String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<ScheduleItem> scheduleItems = new ArrayList<>();
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    for (DataSnapshot scheduleSnapshot : userSnapshot.getChildren()) {
-                        ScheduleItem scheduleItem = scheduleSnapshot.getValue(ScheduleItem.class);
-                        scheduleItems.add(scheduleItem);
+                    if (!userSnapshot.getKey().equals(currentUserID)) {
+                        for (DataSnapshot allSchedule : userSnapshot.getChildren()) {
+                            for (DataSnapshot scheduleSnapshot : allSchedule.getChildren()) {
+                                ScheduleItem scheduleItem = scheduleSnapshot.getValue(ScheduleItem.class);
+                                scheduleItems.add(scheduleItem);
+                            }
+                        }
                     }
                 }
 
