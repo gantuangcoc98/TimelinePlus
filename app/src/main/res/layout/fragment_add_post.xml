@@ -221,9 +221,8 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:hint="Date"
                 android:inputType="text"
-                android:textSize="18sp"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"/>
+                android:textColorHint="@color/gray"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -269,7 +268,7 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:hint="Location"
                 android:inputType="text"
-                android:textColorHint="@color/white"
+                android:textColorHint="@color/gray"
                 android:textSize="18sp"
                 android:textColor="@color/white"/>
 
@@ -316,7 +315,7 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:hint="Email Address"
                 android:inputType="text"
-                android:textColorHint="@color/white"
+                android:textColorHint="@color/gray"
                 android:textSize="18sp"
                 android:textColor="@color/white"/>
 
@@ -366,8 +365,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@android:color/transparent"
                 android:hint="Add Notes"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
+                android:textColorHint="@color/gray"
                 android:fontFamily="@font/poppins_semibold"
                 android:lineSpacingExtra="2dp"
                 android:gravity="top"

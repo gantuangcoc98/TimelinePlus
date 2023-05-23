@@ -61,11 +61,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
                     android:background="@drawable/buttons"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Suggestions"
-                    android:textSize="14sp"
                     android:textAllCaps="false"
-                    android:layout_weight="1"/>
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/btnYourFriends"
@@ -73,11 +75,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
                     android:background="@drawable/buttons"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="Your Friends"
-                    android:textSize="14sp"
                     android:textAllCaps="false"
-                    android:layout_weight="1"/>
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 

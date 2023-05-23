@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FragmentAddPost"
+    android:background="@color/blue">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutTopAddSchedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:id="@+id/tvProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="Edit Profile"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_semibold"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- LinearLayout of Date -->
+    <LinearLayout
+        android:id="@+id/layoutUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_background"
+        app:layout_constraintTop_toBottomOf="@+id/layoutTopAddSchedule"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/setUsername"
+                android:layout_width="298dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="Username"
+                android:inputType="text"
+                android:textSize="18sp"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <!-- End of LinearLayout of Date -->
+
+    <LinearLayout
+        android:id="@+id/layoutFirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_background"
+        app:layout_constraintTop_toBottomOf="@+id/layoutUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/setFirst"
+                android:layout_width="298dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="First Name"
+                android:inputType="text"
+                android:textSize="18sp"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- LinearLayout of Location -->
+    <LinearLayout
+        android:id="@+id/layoutLast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_background"
+        app:layout_constraintTop_toBottomOf="@+id/layoutFirst"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/setLast"
+                android:layout_width="296dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="Last Name"
+                android:inputType="text"
+                android:textColorHint="@color/gray"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <!-- End of LinearLayout of Location -->
+
+    <!-- Start of LinearLayout of Email Address -->
+    <LinearLayout
+        android:id="@+id/layoutPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_background"
+        app:layout_constraintTop_toBottomOf="@+id/layoutLast"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/getPass"
+                android:layout_width="299dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="Old Password"
+                android:inputType="text"
+                android:textColorHint="@color/gray"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutPasss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_background"
+        app:layout_constraintTop_toBottomOf="@+id/layoutPass"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/setPass"
+                android:layout_width="299dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="New Password"
+                android:inputType="text"
+                android:textColorHint="@color/gray"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutNPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_background"
+        app:layout_constraintTop_toBottomOf="@+id/layoutPasss"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/setPasss"
+                android:layout_width="299dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="Confirm New Password"
+                android:inputType="text"
+                android:textColorHint="@color/gray"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnPublish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_semibold"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="536dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/buttons"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

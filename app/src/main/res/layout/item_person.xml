@@ -34,21 +34,21 @@
                 android:textColor="@color/white"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="283dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp">
 
                 <Button
                     android:id="@+id/btnAddFriend"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add Friend"
-                    android:textColor="@color/white"
-                    android:background="@drawable/buttons"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:layout_marginRight="10dp"/>
+                    android:background="@drawable/buttons"
+                    android:text="Add Friend"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
