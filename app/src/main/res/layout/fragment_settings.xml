@@ -48,7 +48,7 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/btnEditTheme"
+            android:id="@+id/btnThemes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/default_background"
