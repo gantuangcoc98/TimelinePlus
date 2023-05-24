@@ -99,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Join"
-        android:background="@drawable/darkerbutton"
+        android:background="@drawable/buttons"
         android:textColor="@color/white"
         android:fontFamily="@font/poppins_semibold"/>
 

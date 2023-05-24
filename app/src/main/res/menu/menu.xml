@@ -6,7 +6,8 @@
         android:icon="@drawable/baseline_newspaper_24"
         android:title="Home" />
 
-    <item android:title="Add"
+    <item
+        android:title="Add"
         android:id="@+id/menuAddPost"
         android:icon="@drawable/baseline_add_circle_outline_24"/>
 
