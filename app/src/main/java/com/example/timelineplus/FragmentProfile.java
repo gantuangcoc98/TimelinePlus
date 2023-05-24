@@ -92,7 +92,19 @@ public class FragmentProfile extends Fragment {
 
         // Groups button implementation
         btnGroups = view.findViewById(R.id.btnGroups);
+        btnGroups.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                // Replace the current fragment with FragmentGroups
+                FragmentGroups fragmentGroups = new FragmentGroups();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.homeFrameLayout, fragmentGroups)
+                        .addToBackStack(null) // Add the transaction to the back stack
+                        .commit();
+            }
+        });
 
         // Logout button implementation
         btnLogout = view.findViewById(R.id.btnLogout);
