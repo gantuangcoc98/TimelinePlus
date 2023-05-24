@@ -41,8 +41,6 @@ public class FragmentYourGroups extends Fragment {
 
         String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        ArrayList<Group> groupList = new ArrayList<>();
-
         DatabaseReference currentPerson = FirebaseDatabase.getInstance().getReference("people").child(currentUserID);
         currentPerson.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -55,12 +53,17 @@ public class FragmentYourGroups extends Fragment {
                 groups.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<Group> groupList = new ArrayList<>();
+
                         for (DataSnapshot group : snapshot.getChildren()) {
                             Group g = group.getValue(Group.class);
 
                             if (g.getOwner().equals(currName))
                                 groupList.add(g);
                         }
+
+                        GroupAdapter groupAdapter = new GroupAdapter(context, groupList);
+                        recyclerViewYourGroups.setAdapter(groupAdapter);
                     }
 
                     @Override
@@ -76,9 +79,6 @@ public class FragmentYourGroups extends Fragment {
 
             }
         });
-
-        GroupAdapter groupAdapter = new GroupAdapter(context, groupList);
-        recyclerViewYourGroups.setAdapter(groupAdapter);
 
         return view;
     }
