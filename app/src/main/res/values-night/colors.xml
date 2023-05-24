@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#1d267d</color>
-    <color name="button">#f64c72</color>
-    <color name="darkerbutton">#850E35</color>
-    <color name="darkerbackground">#242582</color>
+    <color name="background">#454545</color>
+    <color name="button">#FF5C8D</color>
+    <color name="darkerbutton">#e90064</color>
+    <color name="darkerbackground">@color/black</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#D3D3D3</color>

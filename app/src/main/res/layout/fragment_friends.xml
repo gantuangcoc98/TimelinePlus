@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".FragmentFriends"
-    android:background="@color/blue">
+    android:background="@color/background">
 
     <LinearLayout
         android:id="@+id/layoutFriendsTitle"
