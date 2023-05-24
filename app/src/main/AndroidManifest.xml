@@ -12,11 +12,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TimelinePlus"
+        android:theme="@style/Theme.TimelinePlusLight"
         tools:targetApi="31">
-        <activity
-            android:name=".AddNote"
-            android:exported="false" />
         <activity
             android:name=".Home"
             android:exported="false" />

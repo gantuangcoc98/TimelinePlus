@@ -66,7 +66,6 @@
                 android:id="@+id/etSetFirstName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStartEndOf="@id/tvFirstName"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/poppins_light"
                 android:hint="Input first name"
@@ -102,7 +101,6 @@
                 android:id="@+id/etSetLastName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStartEndOf="@id/tvLastName"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/poppins_light"
                 android:hint="Input last name"
@@ -138,7 +136,6 @@
                 android:id="@+id/etSetEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStartEndOf="@id/tvEmail"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/poppins_light"
                 android:hint="Input email"
@@ -174,7 +171,6 @@
                 android:id="@+id/etSetPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStartEndOf="@id/tvLastName"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/poppins_light"
                 android:hint="Input password"
@@ -182,7 +178,8 @@
                 android:paddingBottom="10dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/gray"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="15dp"
+                android:inputType="textPassword"/>
 
         </LinearLayout>
 
