@@ -13,9 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -57,7 +59,47 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
             public void onClick(View view) {
                 // Get first the id of the current user that is logged in
                 String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference people = FirebaseDatabase.getInstance().getReference("people").child(currentUserID);
+                people.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot person) {
+                        Person currentPerson = person.getValue(Person.class);
 
+                        String groupName = holder.setScheduleTitle.getText().toString();
+                        DatabaseReference groups = FirebaseDatabase.getInstance().getReference("groups").child(groupName);
+                        groups.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot group) {
+                                Group currentGroup = group.getValue(Group.class);
+                                ArrayList<Person> members = new ArrayList<>();
+                                members = currentGroup.getMembers();
+                                members.add(currentPerson);
+                                currentGroup.setMembers(members);
+
+                                groups.setValue(currentGroup, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                        if (error == null) {
+                                            System.out.println("Successfully updated group: " + groupName);
+                                        } else {
+                                            System.out.println("Failed to update group: " + groupName);
+                                        }
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
                 // Get the key of the schedule that is joined in
                 String scheduleID = scheduleItem.getScheduleID();

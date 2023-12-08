@@ -17,9 +17,13 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class FragmentAddPost extends Fragment {
     public FragmentAddPost() {
@@ -71,24 +75,35 @@ public class FragmentAddPost extends Fragment {
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DatabaseReference people = FirebaseDatabase.getInstance().getReference("people").child(currentUserID);
+                people.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Person currentPerson = snapshot.getValue(Person.class);
+
+                        // Convert the initialized ids to String variables
+                        String scheduleTitle = setTitle.getText().toString();
+                        String date = setDate.getText().toString();
+                        String time = setStartTime.getText().toString() + " - " + setEndTime.getText().toString();
+                        String location = setLocation.getText().toString();
+                        String email = setEmail.getText().toString();
+                        String notes = setNotes.getText().toString();
+
+                        // Create a new object of ScheduleItem from the converted string variables
+                        ScheduleItem scheduleItem = new ScheduleItem(scheduleTitle, date, location, email, time, notes);
+                        String schedulesID = databaseReference.child(currentUserID).push().getKey(); // Create a key under the user's ID
+                        scheduleItem.setScheduleID(schedulesID);
 
 
-                // Convert the initialized ids to String variables
-                String scheduleTitle = setTitle.getText().toString();
-                String date = setDate.getText().toString();
-                String time = setStartTime.getText().toString() + " - " + setEndTime.getText().toString();
-                String location = setLocation.getText().toString();
-                String email = setEmail.getText().toString();
-                String notes = setNotes.getText().toString();
+                        // Insert the created ScheduleItem data to the database
+                        insertScheduleToDatabase(scheduleItem, currentPerson);
+                    }
 
-                // Create a new object of ScheduleItem from the converted string variables
-                ScheduleItem scheduleItem = new ScheduleItem(scheduleTitle, date, location, email, time, notes);
-                String schedulesID = databaseReference.child(currentUserID).push().getKey(); // Create a key under the user's ID
-                scheduleItem.setScheduleID(schedulesID);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-
-                // Insert the created ScheduleItem data to the database
-                insertScheduleToDatabase(scheduleItem);
+                    }
+                });
             }
         });
 
@@ -96,13 +111,31 @@ public class FragmentAddPost extends Fragment {
     }
 
     // This method will insert a ScheduleItem data with the corresponding user that posted it
-    private void insertScheduleToDatabase(ScheduleItem scheduleItem) {
+    private void insertScheduleToDatabase(ScheduleItem scheduleItem, Person owner) {
         databaseReference.child(currentUserID).child("Own Schedule").child(scheduleItem.getScheduleID()).setValue(scheduleItem, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 if (error == null) { // There is no error
                     System.out.println("Successfully added new data to the schedules column");
-                    Toast.makeText(getContext(), "Schedule published!", Toast.LENGTH_SHORT).show();
+
+                    ArrayList<Person> members = new ArrayList<>();
+                    members.add(owner);
+
+                    Group newGroup = new Group(scheduleItem.getSetScheduleTitle(), owner.getName(), members);
+                    DatabaseReference groups = FirebaseDatabase.getInstance().getReference("groups").child(scheduleItem.getSetScheduleTitle());
+                    groups.setValue(newGroup, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                            if (error == null) {
+                                System.out.println("Successfully added new data to the groups column");
+                                Toast.makeText(getContext(), "Schedule published!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                System.out.println("Failed to add new data to the groups column");
+                                Toast.makeText(context, "An error occured, please try again later", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                     Intent home = new Intent(context, Home.class);
                     startActivity(home);
                 } else { // There is error
